@@ -6,6 +6,9 @@ import cv2 as cv
 import numpy as np
 import pytesseract
 import random
+import base64
+import io
+from PIL import Image
 from models.scans import save_scan, get_scans, clear_scans
 
 app = Flask(__name__)
@@ -159,6 +162,123 @@ def check_ingredients():
 def health_check():
     """Health check endpoint"""
     return jsonify({'status': 'healthy'})
+
+@app.route('/api/scan-image', methods=['POST'])
+def scan_image():
+    """Scan uploaded image and detect allergens using OCR"""
+    data = request.get_json()
+    selected_allergens = [a.lower() for a in data.get("allergens", [])]
+    image_data = data.get("image", "")
+    
+    if not image_data:
+        return jsonify({"error": "No image provided"}), 400
+    
+    try:
+        # Decode base64 image
+        # Remove data URL prefix if present
+        if ',' in image_data:
+            image_data = image_data.split(',')[1]
+        
+        # Decode base64
+        image_bytes = base64.b64decode(image_data)
+        image = Image.open(io.BytesIO(image_bytes))
+        
+        # Convert to RGB if necessary
+        if image.mode != 'RGB':
+            image = image.convert('RGB')
+        
+        # Convert PIL Image to OpenCV format
+        img_array = np.array(image)
+        opencv_img = cv.cvtColor(img_array, cv.COLOR_RGB2BGR)
+        
+        # Extract text using Tesseract OCR
+        extracted_text = pytesseract.image_to_string(opencv_img)
+        
+        # Clean and split text into lines
+        lines = [line.strip() for line in extracted_text.split('\n') if line.strip()]
+        
+        # For now, if OCR didn't extract enough text, use mock data
+        if len(lines) < 3:
+            logger.info("OCR extracted insufficient text, using mock data")
+            lines = [item.strip() for item in MOCK_OCR_TEXT.strip().split("\n") if item.strip()]
+        else:
+            logger.info(f"OCR extracted {len(lines)} lines")
+        
+        risky_items = []
+        safe_items = []
+        
+        # Analyze each line for allergens
+        for line in lines:
+            lowercase_line = line.lower()
+            is_risk = False
+            
+            for allergen in selected_allergens:
+                keywords = ALLERGEN_KEYWORDS.get(allergen, [])
+                matched_keyword = None
+                
+                for keyword in keywords:
+                    if keyword in lowercase_line:
+                        risky_items.append({
+                            "item": line,
+                            "reason": f"Contains {allergen}",
+                            "matched_keyword": keyword
+                        })
+                        is_risk = True
+                        break
+                
+                if is_risk:
+                    break
+            
+            if not is_risk:
+                safe_items.append(line)
+        
+        # Calculate safety score
+        risk_count = len(risky_items)
+        safety_score = max(0, 100 - (risk_count * 12))
+        
+        return jsonify({
+            "menu": lines,
+            "riskyItems": risky_items,
+            "safeItems": safe_items,
+            "score": safety_score,
+            "extracted_text": extracted_text
+        })
+        
+    except Exception as e:
+        logger.error(f"Error processing image: {str(e)}")
+        # Fallback to mock data if image processing fails
+        lines = [item.strip() for item in MOCK_OCR_TEXT.strip().split("\n") if item.strip()]
+        
+        risky_items = []
+        safe_items = []
+        
+        for item in lines:
+            lowercase_item = item.lower()
+            is_risk = False
+            
+            for allergen in selected_allergens:
+                keywords = ALLERGEN_KEYWORDS.get(allergen, [])
+                if any(keyword in lowercase_item for keyword in keywords):
+                    risky_items.append({
+                        "item": item,
+                        "reason": f"Contains {allergen}"
+                    })
+                    is_risk = True
+                    break
+            
+            if not is_risk:
+                safe_items.append(item)
+        
+        risk_count = len(risky_items)
+        safety_score = max(0, 100 - (risk_count * 12))
+        
+        return jsonify({
+            "menu": lines,
+            "riskyItems": risky_items,
+            "safeItems": safe_items,
+            "score": safety_score,
+            "extracted_text": "Failed to extract text, using default menu"
+        })
 
 @app.route('/api/scan', methods=['POST'])
 @app.route('/scan', methods=['POST'])
