@@ -1,18 +1,42 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useScan } from '../context/ScanContext'
-import { allergenIcon } from '../lib/api'
+import { allergenIcon, saveScan } from '../lib/api'
 import TopNavTabs from './TopNavTabs'
 
 function ResultsPage() {
   const { scanResults } = useScan()
   const navigate = useNavigate()
+  const [saved, setSaved] = useState(false)
 
   useEffect(() => {
     if (!scanResults) {
       navigate("/")
     }
   }, [scanResults, navigate])
+
+  // Save scan data to localStorage when results are available
+  useEffect(() => {
+    if (!scanResults || saved) return
+
+    const scanData = {
+      menu: scanResults.menu || [],
+      dangerous: scanResults.riskyItems || [],
+      score: scanResults.score || 0,
+      time: new Date().toLocaleString()
+    }
+
+    // Save to localStorage
+    try {
+      const existing = JSON.parse(localStorage.getItem('recentScans') || '[]')
+      const updated = [scanData, ...existing].slice(0, 5) // Keep last 5 scans
+      localStorage.setItem('recentScans', JSON.stringify(updated))
+    } catch (error) {
+      console.error('Failed to save scan:', error)
+    }
+
+    setSaved(true)
+  }, [scanResults, saved])
 
   // Get scanResults from context
   const result = scanResults
@@ -217,7 +241,10 @@ function ResultsPage() {
 
               {/* Scan Another Menu Button */}
               <button
-                onClick={() => navigate("/")}
+                onClick={() => {
+                  if (!saved) setSaved(true)
+                  navigate("/")
+                }}
                 className="w-full bg-[#A64B29] hover:bg-[#8B3E24] text-white py-4 px-6 rounded-3xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#A64B29] focus:ring-offset-2 flex items-center justify-center gap-2 shadow-lg"
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

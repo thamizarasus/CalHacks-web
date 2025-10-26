@@ -79,3 +79,46 @@ export async function scanMenu(allergens) {
     throw error
   }
 }
+
+export async function clearScanHistory() {
+  try {
+    const response = await fetch("/api/clear-scans", { method: "DELETE" })
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.json()
+  } catch (error) {
+    console.error('Error clearing scan history:', error)
+    throw error
+  }
+}
+
+export async function getRecentScans() {
+  try {
+    const response = await fetch("/api/scans")
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.json()
+  } catch (error) {
+    console.error('Error getting recent scans:', error)
+    throw error
+  }
+}
+
+export async function saveScan(scanData) {
+  try {
+    const response = await fetch("/api/save-scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(scanData)
+    })
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.json()
+  } catch (error) {
+    console.error('Error saving scan:', error)
+    throw error
+  }
+}

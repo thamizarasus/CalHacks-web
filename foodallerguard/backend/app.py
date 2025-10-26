@@ -6,6 +6,7 @@ import cv2 as cv
 import numpy as np
 import pytesseract
 import random
+from models.scans import save_scan, get_scans, clear_scans
 
 app = Flask(__name__)
 CORS(app)
@@ -202,6 +203,24 @@ def scan_menu():
         "safeItems": safe_items,
         "score": safety_score
     })
+
+@app.route('/api/clear-scans', methods=['DELETE'])
+def clear_scans_api():
+    """Clear all scan history"""
+    clear_scans()
+    return jsonify({"cleared": True}), 200
+
+@app.route('/api/scans', methods=['GET'])
+def get_scans_api():
+    """Get all scans"""
+    return jsonify(get_scans()), 200
+
+@app.route('/api/save-scan', methods=['POST'])
+def save_scan_api():
+    """Save a scan"""
+    data = request.get_json()
+    scan_data = save_scan(data)
+    return jsonify(scan_data), 200
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=6000)

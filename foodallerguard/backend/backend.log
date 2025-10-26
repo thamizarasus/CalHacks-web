@@ -437,3 +437,75 @@
 2025-10-26 04:42:16,352 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:42:16] "GET /api/allergens HTTP/1.1" 200 -
 2025-10-26 04:42:16,357 - __main__ - INFO - GET /api/allergens - 127.0.0.1
 2025-10-26 04:42:16,358 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:42:16] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:48:25,025 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:25,030 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:25,196 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:25,195 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:26,677 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:26,682 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:26,696 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:48:26,697 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:48:29,813 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:29,817 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:29,906 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:29,908 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:30,635 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:30,637 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:30,646 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:48:30,647 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:48:39,932 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:39,937 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 04:48:40,025 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:40,027 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:48:40,717 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:40,720 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:48:40,725 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:48:40,726 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:49:06,588 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/models/scans.py', reloading
+2025-10-26 04:49:06,589 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/models/__init__.py', reloading
+2025-10-26 04:49:06,664 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:49:06,666 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 04:49:07,390 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:49:07,396 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 04:49:07,409 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:49:07,409 - werkzeug - INFO -  * Debugger PIN: 802-283-140
+2025-10-26 04:49:25,301 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:49:25,304 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:49:25] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:49:25,309 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:49:25,309 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:49:25] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:49:58,269 - __main__ - INFO - POST /api/scan - 127.0.0.1
+2025-10-26 04:49:58,272 - __main__ - INFO - Body: {'allergens': ['fish']}
+2025-10-26 04:49:58,274 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:49:58] "POST /api/scan HTTP/1.1" 200 -
+2025-10-26 04:50:07,560 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:07,563 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:07] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:50:07,574 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:07,575 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:07] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:50:23,234 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:23,239 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:23] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:50:23,246 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:23,246 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:23] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:50:35,223 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:35,226 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:35] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:50:35,254 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:50:35,255 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:50:35] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:51:21,636 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:51:21,647 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:51:21] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:51:21,653 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:51:21,653 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:51:21] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:52:31,462 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:52:31,469 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:52:31] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:52:31,481 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:52:31,482 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:52:31] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:52:35,167 - __main__ - INFO - DELETE /api/clear-scans - 127.0.0.1
+2025-10-26 04:52:35,168 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:52:35] "DELETE /api/clear-scans HTTP/1.1" 200 -
+2025-10-26 04:52:53,369 - __main__ - INFO - POST /api/scan - 127.0.0.1
+2025-10-26 04:52:53,371 - __main__ - INFO - Body: {'allergens': ['fish', 'dairy']}
+2025-10-26 04:52:53,373 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:52:53] "POST /api/scan HTTP/1.1" 200 -
+2025-10-26 04:53:34,275 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:53:34,278 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:53:34] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:53:34,291 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:53:34,292 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:53:34] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:53:43,344 - __main__ - INFO - DELETE /api/clear-scans - 127.0.0.1
+2025-10-26 04:53:43,345 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:53:43] "DELETE /api/clear-scans HTTP/1.1" 200 -
+2025-10-26 04:54:34,444 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:54:34,447 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:54:34] "GET /api/allergens HTTP/1.1" 200 -
