@@ -1,7 +1,9 @@
 import React, { useRef } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const UploadCard = ({ onFileSelect, onStartScan, hasSelectedAllergens }) => {
   const fileInputRef = useRef(null)
+  const navigate = useNavigate()
 
   const handleFileSelectButton = () => {
     if (hasSelectedAllergens) {
@@ -22,8 +24,8 @@ const UploadCard = ({ onFileSelect, onStartScan, hasSelectedAllergens }) => {
   }
 
   const handleCameraScan = () => {
-    if (hasSelectedAllergens && onStartScan) {
-      onStartScan()
+    if (hasSelectedAllergens) {
+      navigate('/camera-scan')
     }
   }
 
