@@ -8,13 +8,113 @@ function ScanningPage() {
   const { selectedAllergies, selectedImage, setScanResults } = useScan()
   const [isDone, setIsDone] = useState(false)
   const [countdown, setCountdown] = useState(5)
+  const [messageIndex, setMessageIndex] = useState(0)
+  const [liveText, setLiveText] = useState([])
+  const [progress, setProgress] = useState(0)
   const navigate = useNavigate()
+
+  const messages = [
+    "Analyzing proteins…",
+    "Checking allergen markers…",
+    "Detecting high-risk ingredients…",
+    "Scanning for cross-contamination risks…",
+    "Using AI to classify menu items…"
+  ]
+
+  const allergenMessages = {
+    fish: [
+      "Checking for seafood proteins…",
+      "Scanning dish names for fish terms…",
+      "Analyzing menu for fish allergens…",
+      "Detecting high-risk marine items…"
+    ],
+    peanuts: [
+      "Identifying nut-based risks…",
+      "Scanning dishes for peanut indicators…",
+      "Checking sauces for peanut oil…",
+      "Detecting potential nut exposure…"
+    ],
+    dairy: [
+      "Scanning for milk-based ingredients…",
+      "Identifying cheese-related items…",
+      "Checking for hidden dairy…",
+      "Detecting casein and whey markers…"
+    ],
+    shellfish: [
+      "Checking for crustacean proteins…",
+      "Scanning for shellfish indicators…",
+      "Detecting mollusk-related risks…",
+      "Analyzing seafood items…"
+    ],
+    eggs: [
+      "Checking for egg proteins…",
+      "Scanning for egg-based items…",
+      "Detecting hidden egg ingredients…",
+      "Analyzing baked goods…"
+    ]
+  }
+
+  function pickMessages() {
+    if (!selectedAllergies || selectedAllergies.length === 0) return messages
+    const first = selectedAllergies[0].toLowerCase()
+    return allergenMessages[first] || messages
+  }
+
+  const dynamicMessages = pickMessages()
+
+  const mockOCR = [
+    "Garden Salad",
+    "Fries",
+    "Grilled Chicken",
+    "Tilapia",
+    "Catfish",
+    "Buffalo Wings",
+    "Peanut Satay",
+    "Crab Cakes"
+  ]
 
   useEffect(() => {
     if (!selectedImage || selectedAllergies.length === 0) {
       navigate("/")
     }
   }, [selectedImage, selectedAllergies, navigate])
+
+  // Progress ring effect - increments every 250ms
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prev) => {
+        const next = Math.min(prev + 5, 100)
+        return next
+      })
+    }, 250)
+
+    return () => clearInterval(timer)
+  }, [])
+
+  // Rotating message effect
+  useEffect(() => {
+    const msgInterval = setInterval(() => {
+      setMessageIndex((prev) => (prev + 1) % dynamicMessages.length)
+    }, 1500)
+
+    return () => clearInterval(msgInterval)
+  }, [dynamicMessages])
+
+  // Live text preview effect
+  useEffect(() => {
+    const textInterval = setInterval(() => {
+      setLiveText((prev) => {
+        const next = mockOCR[prev.length]
+        if (!next) return prev
+        return [...prev, next]
+      })
+    }, 900)
+
+    return () => clearInterval(textInterval)
+  }, [])
+
+  // Progress-based navigation - wait for scan to complete
+  // This handles the case where progress completes before API call finishes
 
   // Countdown timer - only navigate when scan is done and results are available
   useEffect(() => {
@@ -97,17 +197,35 @@ function ScanningPage() {
               <div className="absolute w-48 h-48 rounded-full border-4 border-[#A64B29] opacity-50 animate-ping" style={{ animationDelay: '150ms' }}></div>
               <div className="absolute w-32 h-32 rounded-full border-4 border-[#A64B29] opacity-30 animate-ping" style={{ animationDelay: '300ms' }}></div>
 
-              {/* Core scanner dot */}
-              <div className="w-16 h-16 rounded-full bg-[#A64B29] shadow-lg animate-pulse"></div>
+              {/* Core scanner dot with progress ring */}
+              <div className="w-28 h-28 rounded-full border-4 border-[#A64B29]/50 border-t-[#A64B29] flex items-center justify-center shadow-lg">
+                <span className="text-[#A64B29] font-semibold text-lg">
+                  {progress}%
+                </span>
+              </div>
             </div>
 
             {/* Status Text */}
             <h3 className="text-2xl font-semibold text-gray-900 mb-2">
               Analyzing Allergens…
             </h3>
-            <p className="text-gray-600 mb-6">
-              {isDone ? 'Scan complete! Redirecting to results...' : 'Identifying dangerous items...'}
+            <p className="text-gray-600 mb-4 animate-pulse">
+              {isDone ? 'Scan complete! Redirecting to results...' : dynamicMessages[messageIndex]}
             </p>
+
+            {/* Live Ingredients Preview */}
+            {!isDone && liveText.length > 0 && (
+              <div className="bg-gray-50 border border-gray-200 rounded-xl p-4 mt-6 w-full backdrop-blur-sm">
+                <p className="text-gray-700 font-semibold mb-2 text-sm">Detecting ingredients…</p>
+                <ul className="text-gray-600 text-sm space-y-1">
+                  {liveText.map((item, idx) => (
+                    <li key={idx} className="opacity-80">
+                      • {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
 
             {/* Countdown Timer - only show when scan is done */}
             {isDone && (

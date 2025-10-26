@@ -400,3 +400,40 @@
 2025-10-26 04:30:31,120 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:30:31] "GET /api/allergens HTTP/1.1" 200 -
 2025-10-26 04:30:31,157 - __main__ - INFO - GET /api/allergens - 127.0.0.1
 2025-10-26 04:30:31,158 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:30:31] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:34:36,763 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:34:36,765 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:34:36] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:34:36,769 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:34:36,770 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:34:36] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:34:55,153 - __main__ - INFO - POST /api/scan - 127.0.0.1
+2025-10-26 04:34:55,157 - __main__ - INFO - Body: {'allergens': ['peanuts', 'fish']}
+2025-10-26 04:34:55,159 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:34:55] "POST /api/scan HTTP/1.1" 200 -
+2025-10-26 04:38:08,297 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:08,301 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:08] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:38:08,323 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:08,323 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:08] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:38:10,777 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:10,782 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:10] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:38:10,791 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:10,792 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:10] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:38:33,667 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:33,669 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:33] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:38:33,673 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:38:33,674 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:38:33] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:40:50,751 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:40:50,754 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:40:50] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:40:50,759 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:40:50,760 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:40:50] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:41:04,343 - __main__ - INFO - POST /api/scan - 127.0.0.1
+2025-10-26 04:41:04,345 - __main__ - INFO - Body: {'allergens': ['wheat']}
+2025-10-26 04:41:04,347 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:41:04] "POST /api/scan HTTP/1.1" 200 -
+2025-10-26 04:41:15,954 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:41:15,957 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:41:15] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:41:15,963 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:41:15,964 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:41:15] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:42:03,125 - __main__ - INFO - POST /api/scan - 127.0.0.1
+2025-10-26 04:42:03,127 - __main__ - INFO - Body: {'allergens': ['eggs']}
+2025-10-26 04:42:03,128 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:42:03] "POST /api/scan HTTP/1.1" 200 -
+2025-10-26 04:42:16,343 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:42:16,352 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:42:16] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 04:42:16,357 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 04:42:16,358 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 04:42:16] "GET /api/allergens HTTP/1.1" 200 -

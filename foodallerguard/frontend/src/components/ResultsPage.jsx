@@ -46,6 +46,17 @@ function ResultsPage() {
   const riskyItems = menu.filter(m => m.isRisk)
   const safeItems = menu.filter(m => !m.isRisk)
 
+  // Group dangerous items by allergen
+  const groupedByAllergen = result.riskyItems?.reduce((acc, item) => {
+    // Extract allergen name from "Contains {allergen}" format
+    const allergen = item.reason.replace('Contains ', '').toLowerCase()
+    if (!acc[allergen]) {
+      acc[allergen] = []
+    }
+    acc[allergen].push(item.item)
+    return acc
+  }, {}) || {}
+
   const data = {
     score: result.score || 0,
     riskLevel: result.riskLevel || 'Low Risk',
@@ -131,15 +142,36 @@ function ResultsPage() {
                   </div>
                   <h3 className="text-xl font-semibold text-red-700">Avoid These</h3>
                 </div>
-                <div className="space-y-3">
-                  {data.unsafe.map((item, index) => (
-                    <div key={index} className="bg-red-100 p-3 rounded-xl border border-red-300 text-red-700 flex justify-between items-center">
-                      <span className="font-medium">{item.name}</span>
-                      <span className="text-lg">
-                        {allergenIcon[item.allergen] || "⚠️"}
-                      </span>
-                    </div>
-                  ))}
+                
+                {/* Grouped by allergen */}
+                <div className="space-y-4">
+                  {Object.keys(groupedByAllergen).map((allergen) => {
+                    const count = groupedByAllergen[allergen].length
+
+                    return (
+                      <div key={allergen} className="border border-red-300 rounded-2xl bg-red-50 p-4 shadow-sm">
+                        <h4 className="text-red-700 font-semibold text-base mb-3 flex items-center gap-2">
+                          <span>❌</span>
+                          <span>{allergen.charAt(0).toUpperCase() + allergen.slice(1)} Allergy</span>
+                          <span className="text-red-500 text-sm bg-red-100 rounded-full px-2 py-1">
+                            {count} {count === 1 ? "item" : "items"}
+                          </span>
+                        </h4>
+
+                        <div className="space-y-2">
+                          {groupedByAllergen[allergen].map((itemName, itemIndex) => (
+                            <div
+                              key={itemIndex}
+                              className="flex justify-between items-center bg-white rounded-xl p-3 border border-red-200"
+                            >
+                              <span className="text-red-600 font-medium">{itemName}</span>
+                              <span className="text-yellow-500 text-xl">⚠️</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )
+                  })}
                 </div>
               </div>
             </div>
