@@ -2,9 +2,15 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 import json
 import os
+import cv2 as cv
+import numpy as np
 
 app = Flask(__name__)
 CORS(app)
+
+textDetector = cv.dnn_TextDetectionModel_EAST("/home/calicanine/Documents/CalHacks-web/foodallerguard/backend/frozen_east_text_detection.pb")
+textDetector.setNMSThreshold(0.4)
+textDetector.setConfidenceThreshold(0.8)
 
 # Load allergens data
 def load_allergens():
@@ -13,6 +19,40 @@ def load_allergens():
             return json.load(f)
     except FileNotFoundError:
         return {}
+
+@app.route("/", methods=["GET"])
+def home_page():
+    """Load the home page"""
+    camera = cv.VideoCapture(0)
+    ret, frame = camera.read()
+
+    textDetector.setInputParams(1.0, frame.shape[0:2], (123.68, 116.78, 103.94), True)
+
+    message = ""
+    if not camera.isOpened():
+        message = "<p>Error: camera cannot be opened...</p>"
+        return message
+    
+    while True:
+        ret, frame = camera.read()
+        if not ret:
+            message = "<p>Error: Unable to receive frame...</p>"
+            break
+
+        boxes, confidences = textDetector.detect(frame)
+        for box in boxes:
+            cv.polylines(frame, [np.array(box, np.int32)], isClosed=True, color=(0, 255, 0), thickness=1)
+
+        cv.imshow("FoodAllerGuard", frame)
+
+        if cv.waitKey(1) == ord("q"):
+            message = "<p>Stream ended...</p>"
+            break
+    
+    camera.release()
+    cv.destroyAllWindows()
+
+    return message
 
 @app.route('/api/allergens', methods=['GET'])
 def get_allergens():
