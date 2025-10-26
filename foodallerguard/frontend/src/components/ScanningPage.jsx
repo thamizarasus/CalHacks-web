@@ -159,6 +159,24 @@ function ScanningPage() {
         }
         console.log('Formatted results:', formattedResults)
         setScanResults(formattedResults)
+        
+        // Save scan to localStorage
+        const scanData = {
+          menu: result.menu,
+          dangerous: result.riskyItems,
+          score: result.score,
+          time: new Date().toLocaleString()
+        }
+        
+        try {
+          const existing = JSON.parse(localStorage.getItem('recentScans') || '[]')
+          const updated = [scanData, ...existing].slice(0, 5)
+          localStorage.setItem('recentScans', JSON.stringify(updated))
+          console.log('Scan saved to history')
+        } catch (error) {
+          console.error('Failed to save scan:', error)
+        }
+        
         setIsDone(true)
       } catch (error) {
         console.error('Error scanning menu:', error)

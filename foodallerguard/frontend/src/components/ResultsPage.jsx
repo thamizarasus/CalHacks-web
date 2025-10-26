@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useScan } from '../context/ScanContext'
-import { allergenIcon, saveScan } from '../lib/api'
+import { allergenIcon } from '../lib/api'
 import TopNavTabs from './TopNavTabs'
 
 function ResultsPage() {
@@ -15,28 +15,8 @@ function ResultsPage() {
     }
   }, [scanResults, navigate])
 
-  // Save scan data to localStorage when results are available
-  useEffect(() => {
-    if (!scanResults || saved) return
-
-    const scanData = {
-      menu: scanResults.menu || [],
-      dangerous: scanResults.riskyItems || [],
-      score: scanResults.score || 0,
-      time: new Date().toLocaleString()
-    }
-
-    // Save to localStorage
-    try {
-      const existing = JSON.parse(localStorage.getItem('recentScans') || '[]')
-      const updated = [scanData, ...existing].slice(0, 5) // Keep last 5 scans
-      localStorage.setItem('recentScans', JSON.stringify(updated))
-    } catch (error) {
-      console.error('Failed to save scan:', error)
-    }
-
-    setSaved(true)
-  }, [scanResults, saved])
+  // Note: Scan saving is now handled in ScanningPage.jsx to avoid duplicate saves
+  // The `saved` state is kept to ensure "Scan Another Menu" button works correctly
 
   // Get scanResults from context
   const result = scanResults
