@@ -6,6 +6,7 @@ import FeaturesPage from "./components/FeaturesPage";
 import ScanningPage from "./components/ScanningPage";
 import ResultsPage from "./components/ResultsPage";
 import About from "./pages/About";
+import Contact from "./pages/Contact";
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
           <Route path="/scanning" element={<ScanningPage />} />
           <Route path="/results" element={<ResultsPage />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Routes>
       </Router>
     </ScanProvider>

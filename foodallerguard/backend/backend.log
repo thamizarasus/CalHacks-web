@@ -138,3 +138,7 @@
 2025-10-26 03:29:19,259 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 03:29:19] "GET /api/allergens HTTP/1.1" 200 -
 2025-10-26 03:29:19,263 - __main__ - INFO - GET /api/allergens - 127.0.0.1
 2025-10-26 03:29:19,264 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 03:29:19] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 03:36:13,056 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 03:36:13,070 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 03:36:13] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 03:36:13,085 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 03:36:13,086 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 03:36:13] "GET /api/allergens HTTP/1.1" 200 -
