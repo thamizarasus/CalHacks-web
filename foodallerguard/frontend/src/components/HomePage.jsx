@@ -74,12 +74,22 @@ function HomePage() {
           </p>
         </header>
 
-        <div className="max-w-4xl mx-auto space-y-8">
-          <AllergySelector
-            allergens={allergens}
-            selectedAllergens={selectedAllergies}
-            onSelectionChange={setSelectedAllergies}
-          />
+        <div className="max-w-4xl mx-auto">
+          <section className="my-10">
+            <h2 className="text-2xl font-semibold mb-2">Select Your Allergies</h2>
+            <p className="text-gray-600 mb-6">
+              Choose the allergens you need to avoid. We'll check your ingredients against these.
+            </p>
+
+            {/* Allergy selection buttons */}
+            <AllergySelector
+              allergens={allergens}
+              selectedAllergens={selectedAllergies}
+              onSelectionChange={setSelectedAllergies}
+            />
+          </section>
+
+          <div className="space-y-8">
 
           <UploadCard
             ingredients={ingredients}
@@ -94,6 +104,7 @@ function HomePage() {
           {results && (
             <Results results={results} />
           )}
+          </div>
         </div>
       </div>
     </div>

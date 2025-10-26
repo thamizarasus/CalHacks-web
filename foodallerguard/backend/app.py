@@ -9,9 +9,36 @@ import pytesseract
 app = Flask(__name__)
 CORS(app)
 
-textDetector = cv.dnn_TextDetectionModel_EAST("/home/calicanine/Documents/CalHacks-web/foodallerguard/backend/frozen_east_text_detection.pb")
-textDetector.setNMSThreshold(0.4)
-textDetector.setConfidenceThreshold(0.8)
+# Configure logging to file and console
+import logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+    handlers=[
+        logging.FileHandler('backend.log'),
+        logging.StreamHandler()
+    ]
+)
+logger = logging.getLogger(__name__)
+
+@app.before_request
+def log_request_info():
+    logger.info(f'{request.method} {request.path} - {request.remote_addr}')
+    if request.is_json:
+        logger.info(f'Body: {request.get_json()}')
+
+# Get the directory of the current file
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+MODEL_PATH = os.path.join(BASE_DIR, "frozen_east_text_detection.pb")
+
+# Initialize the text detector only if the model file exists
+textDetector = None
+if os.path.exists(MODEL_PATH):
+    textDetector = cv.dnn_TextDetectionModel_EAST(MODEL_PATH)
+    textDetector.setNMSThreshold(0.4)
+    textDetector.setConfidenceThreshold(0.8)
+else:
+    print(f"Warning: Model file not found at {MODEL_PATH}")
 
 # Load allergens data
 def load_allergens():
@@ -23,41 +50,37 @@ def load_allergens():
 
 @app.route("/", methods=["GET"])
 def home_page():
-    """Load the home page"""
-    camera = cv.VideoCapture(0)
-    ret, frame = camera.read()
+    """API Information"""
+    return jsonify({
+        "message": "FoodAllerGuard API",
+        "endpoints": [
+            "/api/health - Health check",
+            "/api/allergens - Get available allergens",
+            "/api/check - Check ingredients for allergens"
+        ]
+    })
 
-    textDetector.setInputParams(1.0, frame.shape[0:2], (123.68, 116.78, 103.94), True)
-
-    message = ""
-    if not camera.isOpened():
-        message = "<p>Error: camera cannot be opened...</p>"
-        return message
+@app.route("/camera", methods=["GET"])
+def camera_page():
+    """Camera access for scanning"""
+    if textDetector is None:
+        return jsonify({"error": "Text detection model not available"}), 503
     
-    while True:
+    try:
+        # Check camera access
+        camera = cv.VideoCapture(0)
+        if not camera.isOpened():
+            return jsonify({"error": "Camera cannot be opened"}), 500
+        
         ret, frame = camera.read()
+        camera.release()
+        
         if not ret:
-            message = "<p>Error: Unable to receive frame...</p>"
-            break
-
-        boxes, confidences = textDetector.detect(frame)
-        for box in boxes:
-            cv.polylines(frame, [np.array(box, np.int32)], isClosed=True, color=(0, 255, 0), thickness=1)
-
-        img_rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
-        word = pytesseract.image_to_string(img_rgb)
-        print(word)
-
-        cv.imshow("FoodAllerGuard", frame)
-
-        if cv.waitKey(1) == ord("q"):
-            message = "<p>Stream ended...</p>"
-            break
-    
-    camera.release()
-    cv.destroyAllWindows()
-
-    return message
+            return jsonify({"error": "Unable to receive frame"}), 500
+        
+        return jsonify({"status": "Camera is ready"})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/allergens', methods=['GET'])
 def get_allergens():
@@ -99,4 +122,4 @@ def health_check():
     return jsonify({'status': 'healthy'})
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    app.run(debug=True, host='0.0.0.0', port=6000)

@@ -1,18 +1,7 @@
 import React, { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
+import logo from "../../assets/foodallerguard-logo.svg";
 
-function Logo() {
-  // Simple shield + radar placeholder (inline SVG)
-  return (
-    <div className="h-9 w-9 rounded-full bg-[#A64B29]/10 flex items-center justify-center ring-1 ring-[#A64B29]/20">
-      <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#A64B29]">
-        <path fill="currentColor" d="M12 2l7 3v5c0 5-3.6 9.6-7 10-3.4-.4-7-5-7-10V5l7-3z"/>
-        <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.2"/>
-        <path d="M12 7.5v1.5m4.5 3h-1.5M12 15v1.5M8.5 12H7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
-      </svg>
-    </div>
-  );
-}
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -28,11 +17,11 @@ export default function Header() {
       <div className="max-w-6xl mx-auto px-4">
         <div className="h-16 flex items-center justify-between gap-3">
           {/* Left: Logo + Brand */}
-          <Link to="/" className="flex items-center gap-3">
-            <Logo />
+          <Link to="/" className="flex items-center gap-2">
+            <img src={logo} alt="FoodAllerGuard" className="h-8 w-auto" />
             <div className="flex flex-col leading-tight">
-              <span className="text-lg font-semibold text-[#A64B29]">FoodAllerGuard</span>
-              <span className="hidden sm:block text-xs text-slate-600">
+              <span className="text-lg font-semibold text-[#A64C2E]">FoodAllerGuard</span>
+              <span className="hidden sm:block text-xs text-gray-500">
                 AI-Powered Allergy Risk Scanner
               </span>
             </div>

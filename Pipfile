@@ -4,11 +4,13 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-flask = "*"
-opencv-python = "*"
-pytesseract = "*"
 pillow = "*"
 tesseract = "*"
+flask = "*"
+flask-cors = "*"
+python-dotenv = "*"
+opencv-python = "*"
+pytesseract = "*"
 
 [dev-packages]
 
