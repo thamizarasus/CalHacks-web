@@ -1,0 +1,41 @@
+{
+  "nuts": [
+    "almond", "almonds", "walnut", "walnuts", "pecan", "pecans", "cashew", "cashews",
+    "pistachio", "pistachios", "hazelnut", "hazelnuts", "macadamia", "macadamias",
+    "brazil nut", "brazil nuts", "pine nut", "pine nuts", "nut", "nuts"
+  ],
+  "peanuts": [
+    "peanut", "peanuts", "groundnut", "groundnuts", "arachis", "goober"
+  ],
+  "dairy": [
+    "milk", "cream", "butter", "cheese", "yogurt", "yoghurt", "whey", "casein",
+    "lactose", "lactose-free", "dairy", "cow's milk", "goat's milk", "sheep's milk"
+  ],
+  "eggs": [
+    "egg", "eggs", "egg white", "egg whites", "egg yolk", "egg yolks", "albumen",
+    "lecithin", "mayonnaise", "mayo"
+  ],
+  "soy": [
+    "soy", "soya", "soybean", "soybeans", "tofu", "tempeh", "miso", "soy sauce",
+    "tamari", "edamame", "soy lecithin"
+  ],
+  "wheat": [
+    "wheat", "flour", "bread", "pasta", "noodles", "couscous", "bulgur", "semolina",
+    "gluten", "barley", "rye", "oats", "spelt", "kamut", "triticale"
+  ],
+  "fish": [
+    "fish", "salmon", "tuna", "cod", "halibut", "mackerel", "sardine", "anchovy",
+    "fish sauce", "worcestershire sauce"
+  ],
+  "shellfish": [
+    "shrimp", "prawn", "crab", "lobster", "scallop", "mussel", "oyster", "clam",
+    "shellfish", "crustacean", "mollusk"
+  ],
+  "sesame": [
+    "sesame", "sesame seed", "sesame seeds", "tahini", "halva", "sesame oil"
+  ],
+  "sulfites": [
+    "sulfite", "sulfites", "sulphite", "sulphites", "sulfur dioxide", "potassium bisulfite",
+    "sodium bisulfite", "sodium metabisulfite", "potassium metabisulfite"
+  ]
+}
