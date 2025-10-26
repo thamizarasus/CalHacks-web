@@ -49,3 +49,20 @@ export const healthCheck = async () => {
     throw error
   }
 }
+
+export async function scanMenu(allergens) {
+  try {
+    const response = await fetch("/api/scan", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ allergens }),
+    });
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    return await response.json();
+  } catch (error) {
+    console.error('Error scanning menu:', error)
+    throw error
+  }
+}

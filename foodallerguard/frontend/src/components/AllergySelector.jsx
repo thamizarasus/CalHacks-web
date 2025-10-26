@@ -2,6 +2,8 @@ import React, { useState } from 'react'
 
 const AllergySelector = ({ allergens, selectedAllergens, onSelectionChange }) => {
   const [customInput, setCustomInput] = useState("")
+  
+  console.log('AllergySelector received allergens:', allergens)
 
   const handleAllergenToggle = (allergen) => {
     if (selectedAllergens.includes(allergen)) {
@@ -59,7 +61,7 @@ const AllergySelector = ({ allergens, selectedAllergens, onSelectionChange }) =>
           </label>
           
           <div className="flex flex-wrap gap-3">
-            {allergens.map((allergen) => (
+            {allergens && allergens.length > 0 ? allergens.map((allergen) => (
               <button
                 key={allergen}
                 onClick={() => handleAllergenToggle(allergen)}
@@ -72,7 +74,9 @@ const AllergySelector = ({ allergens, selectedAllergens, onSelectionChange }) =>
                 <span>{getEmoji(allergen)}</span>
                 <span>{allergen.charAt(0).toUpperCase() + allergen.slice(1)}</span>
               </button>
-            ))}
+            )) : (
+              <div className="text-gray-500 text-sm">Loading allergens...</div>
+            )}
           </div>
         </div>
 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useScan } from '../context/ScanContext'
+import { scanMenu } from '../lib/api'
 import TopNavTabs from './TopNavTabs'
 
 function ScanningPage() {
@@ -15,36 +16,39 @@ function ScanningPage() {
   }, [selectedImage, selectedAllergies, navigate])
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      // Simulate AI results
-      const aiResults = {
-        score: 78,
-        riskLevel: 'Low Risk',
-        menu: [
-          { text: 'Garden Salad', price: '$8' },
-          { text: 'Fries', price: '$4' },
-          { text: 'Buffalo Wings', price: '$12', hasAllergen: true, allergen: 'dairy' },
-          { text: 'Grilled Chicken', price: '$14' },
-          { text: 'Peanut Satay', price: '$10', hasAllergen: true, allergen: 'peanuts' },
-          { text: 'Crab Cakes', price: '$16', hasAllergen: true, allergen: 'shellfish' }
-        ],
-        unsafe: [
-          { name: 'Buffalo Wings', emoji: '🧀', allergen: 'dairy' },
-          { name: 'Peanut Satay', emoji: '🥜', allergen: 'peanuts' },
-          { name: 'Crab Cakes', emoji: '🦐', allergen: 'shellfish' }
-        ],
-        safe: [
-          'Garden Salad',
-          'Fries',
-          'Grilled Chicken'
-        ]
+    const fetchScanResults = async () => {
+      try {
+        console.log('Starting scan with allergies:', selectedAllergies)
+        const result = await scanMenu(selectedAllergies)
+        console.log('Scan result received:', result)
+        const formattedResults = {
+          score: result.score,
+          riskLevel: result.score >= 70 ? 'Low Risk' : result.score >= 40 ? 'Medium Risk' : 'High Risk',
+          menu: result.menu, // Send menu items as strings
+          riskyItems: result.riskyItems, // Keep risky items info
+          safeItems: result.safeItems, // Keep safe items
+          unsafe: result.riskyItems.map(item => ({
+            name: item.item,
+            allergen: item.reason.replace('Contains ', ''),
+            emoji: '⚠️'
+          })),
+          safe: result.safeItems
+        }
+        console.log('Formatted results:', formattedResults)
+        setScanResults(formattedResults)
+        setIsDone(true)
+        navigate("/results")
+      } catch (error) {
+        console.error('Error scanning menu:', error)
+        console.error('Error details:', error.message, error.stack)
+        alert(`Failed to scan menu. Error: ${error.message}`)
+        navigate("/")
       }
-      setScanResults(aiResults)
-      setIsDone(true)
-      navigate("/results")
-    }, 3500) // Simulate 3.5s AI processing
+    }
+
+    const timer = setTimeout(fetchScanResults, 3500)
     return () => clearTimeout(timer)
-  }, [navigate, setScanResults])
+  }, [selectedAllergies, setScanResults, navigate])
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">

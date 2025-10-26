@@ -13,28 +13,48 @@ function ResultsPage() {
     }
   }, [scanResults, navigate])
 
-  // Use scanResults from context, with fallback to sample data
-  const data = scanResults || {
-    score: 78,
-    riskLevel: 'Low Risk',
-    menu: [
-      { text: 'Garden Salad', price: '$8' },
-      { text: 'Fries', price: '$4' },
-      { text: 'Buffalo Wings', price: '$12', hasAllergen: true, allergen: 'dairy' },
-      { text: 'Grilled Chicken', price: '$14' },
-      { text: 'Peanut Satay', price: '$10', hasAllergen: true, allergen: 'peanuts' },
-      { text: 'Crab Cakes', price: '$16', hasAllergen: true, allergen: 'shellfish' }
-    ],
-    unsafe: [
-      { name: 'Buffalo Wings', emoji: '🧀', allergen: 'dairy' },
-      { name: 'Peanut Satay', emoji: '🥜', allergen: 'peanuts' },
-      { name: 'Crab Cakes', emoji: '🦐', allergen: 'shellfish' }
-    ],
-    safe: [
-      'Garden Salad',
-      'Fries',
-      'Grilled Chicken'
-    ]
+  // Get scanResults from context
+  const result = scanResults
+
+  if (!result || !result.menu) {
+    return (
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="container mx-auto px-4 py-8">
+          <div className="p-4 bg-yellow-50 text-yellow-800 rounded-lg border border-yellow-200">
+            No scanned menu found. Please upload a menu first.
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Convert menu items to proper format
+  const menu = result.menu.map(item => {
+    if (typeof item === 'string') {
+      // Check if this item is in the risky items list
+      const riskyItem = result.riskyItems?.find(r => r.item === item)
+      return {
+        name: item,
+        isRisk: !!riskyItem,
+        allergen: riskyItem?.reason || null
+      }
+    }
+    return item
+  })
+
+  const riskyItems = menu.filter(m => m.isRisk)
+  const safeItems = menu.filter(m => !m.isRisk)
+
+  const data = {
+    score: result.score || 0,
+    riskLevel: result.riskLevel || 'Low Risk',
+    menu: menu,
+    unsafe: riskyItems.map(item => ({
+      name: typeof item === 'string' ? item : item.name,
+      emoji: '⚠️',
+      allergen: typeof item === 'string' ? 'allergen' : (item.allergen || 'allergen')
+    })),
+    safe: safeItems.map(item => typeof item === 'string' ? item : item.name)
   }
 
   const allergenEmojiMap = {
@@ -88,25 +108,25 @@ function ResultsPage() {
               </div>
 
               {/* Scanned Menu Card */}
-              <div className="bg-white rounded-3xl shadow-lg p-6">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">Scanned Menu</h3>
-                <p className="text-center text-gray-700 mb-4">Restaurant Menu</p>
-                <div className="space-y-2">
+              <div className="bg-white rounded-2xl shadow-lg p-6">
+                <h2 className="text-xl font-semibold text-gray-900 mb-4">Scanned Menu</h2>
+                <div className="space-y-3">
                   {data.menu.map((item, index) => (
-                    <div
+                    <div 
                       key={index}
-                      className={`flex items-center justify-between py-2 px-3 rounded-lg ${
-                        item.hasAllergen
-                          ? 'bg-red-100 border-l-4 border-red-500'
-                          : 'bg-white'
+                      className={`p-2 rounded-lg text-gray-800 ${
+                        item.isRisk 
+                          ? "bg-red-100 border border-red-300" 
+                          : "bg-gray-50 border border-gray-200"
                       }`}
                     >
-                      <span className="text-sm text-gray-900">{item.text}</span>
-                      <span className="text-sm text-gray-600">{item.price}</span>
+                      {typeof item === 'string' ? item : item.name}
                     </div>
                   ))}
                 </div>
-                <p className="text-xs text-gray-500 mt-4">Risk items highlighted in red</p>
+                <p className="text-gray-500 text-sm mt-3">
+                  Risk items highlighted in red
+                </p>
               </div>
             </div>
 
