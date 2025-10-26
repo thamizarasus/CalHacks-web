@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 function Logo() {
   // Simple shield + radar placeholder (inline SVG)
@@ -13,20 +14,21 @@ function Logo() {
   );
 }
 
-export default function Header({ active = "home" }) {
+export default function Header() {
   const [open, setOpen] = useState(false);
+  const location = useLocation();
 
   const linkBase =
     "px-3 py-2 text-sm text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-300 rounded-md";
-  const isActive = (k) =>
-    active === k ? "text-[#A64B29] font-semibold" : "";
+  const isActive = (path) =>
+    location.pathname === path ? "text-[#A64B29] font-semibold" : "";
 
   return (
     <header className="sticky top-0 z-40 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm">
       <div className="max-w-6xl mx-auto px-4">
         <div className="h-16 flex items-center justify-between gap-3">
           {/* Left: Logo + Brand */}
-          <a href="#" className="flex items-center gap-3">
+          <Link to="/" className="flex items-center gap-3">
             <Logo />
             <div className="flex flex-col leading-tight">
               <span className="text-lg font-semibold text-[#A64B29]">FoodAllerGuard</span>
@@ -34,19 +36,19 @@ export default function Header({ active = "home" }) {
                 AI-Powered Allergy Risk Scanner
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-2">
-            <a href="#features" className={`${linkBase} ${isActive("features")}`}>Features</a>
-            <a href="#about" className={`${linkBase} ${isActive("about")}`}>About</a>
-            <a href="#contact" className={`${linkBase} ${isActive("contact")}`}>Contact</a>
-            <a
-              href="#get-started"
+            <Link to="/features" className={`${linkBase} ${isActive("/features")}`}>Features</Link>
+            <Link to="/about" className={`${linkBase} ${isActive("/about")}`}>About</Link>
+            <Link to="/contact" className={`${linkBase} ${isActive("/contact")}`}>Contact</Link>
+            <Link
+              to="/"
               className="ml-2 inline-flex items-center rounded-xl bg-[#A64B29] px-5 py-2 text-white text-sm font-medium shadow-sm hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#A64B29]"
             >
               Get Started
-            </a>
+            </Link>
           </nav>
 
           {/* Mobile: Hamburger */}
@@ -77,15 +79,15 @@ export default function Header({ active = "home" }) {
         }`}
       >
         <div className="px-4 py-3 space-y-1 bg-white">
-          <a href="#features" className={`${linkBase} block w-full text-left ${isActive("features")}`}>Features</a>
-          <a href="#about" className={`${linkBase} block w-full text-left ${isActive("about")}`}>About</a>
-          <a href="#contact" className={`${linkBase} block w-full text-left ${isActive("contact")}`}>Contact</a>
-          <a
-            href="#get-started"
+          <Link to="/features" className={`${linkBase} block w-full text-left ${isActive("/features")}`}>Features</Link>
+          <Link to="/about" className={`${linkBase} block w-full text-left ${isActive("/about")}`}>About</Link>
+          <Link to="/contact" className={`${linkBase} block w-full text-left ${isActive("/contact")}`}>Contact</Link>
+          <Link
+            to="/"
             className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-[#A64B29] px-5 py-2 text-white text-sm font-medium shadow-sm hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#A64B29]"
           >
             Get Started
-          </a>
+          </Link>
         </div>
       </div>
     </header>
