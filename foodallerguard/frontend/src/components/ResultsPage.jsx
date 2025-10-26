@@ -33,6 +33,9 @@ function ResultsPage() {
     )
   }
 
+  // Check if this is a camera scan (has extractedText field)
+  const isCameraScan = result.extractedText !== undefined
+
   // Convert menu items to proper format
   const menu = result.menu.map(item => {
     if (typeof item === 'string') {
@@ -111,27 +114,29 @@ function ResultsPage() {
                 <p className="text-sm text-gray-500">Based on your selected allergens</p>
               </div>
 
-              {/* Scanned Menu Card */}
-              <div className="bg-white rounded-2xl shadow-lg p-6">
-                <h2 className="text-xl font-semibold text-gray-900 mb-4">Scanned Menu</h2>
-                <div className="space-y-3">
-                  {data.menu.map((item, index) => (
-                    <div 
-                      key={index}
-                      className={`p-2 rounded-lg text-gray-800 ${
-                        item.isRisk 
-                          ? "bg-red-100 border border-red-300" 
-                          : "bg-gray-50 border border-gray-200"
-                      }`}
-                    >
-                      {typeof item === 'string' ? item : item.name}
-                    </div>
-                  ))}
+              {/* Scanned Menu Card - Only show for non-camera scans */}
+              {!isCameraScan && (
+                <div className="bg-white rounded-2xl shadow-lg p-6">
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">Scanned Menu</h2>
+                  <div className="space-y-3">
+                    {data.menu.map((item, index) => (
+                      <div 
+                        key={index}
+                        className={`p-2 rounded-lg text-gray-800 ${
+                          item.isRisk 
+                            ? "bg-red-100 border border-red-300" 
+                            : "bg-gray-50 border border-gray-200"
+                        }`}
+                      >
+                        {typeof item === 'string' ? item : item.name}
+                      </div>
+                    ))}
+                  </div>
+                  <p className="text-gray-500 text-sm mt-3">
+                    Risk items highlighted in red
+                  </p>
                 </div>
-                <p className="text-gray-500 text-sm mt-3">
-                  Risk items highlighted in red
-                </p>
-              </div>
+              )}
             </div>
 
             {/* Middle Column */}
@@ -147,62 +152,90 @@ function ResultsPage() {
                   <h3 className="text-xl font-semibold text-red-700">Avoid These</h3>
                 </div>
                 
-                {/* Grouped by allergen */}
-                <div className="space-y-4">
-                  {Object.keys(groupedByAllergen).map((allergen) => {
-                    const count = groupedByAllergen[allergen].length
-
-                    return (
-                      <div key={allergen} className="border border-red-300 rounded-2xl bg-red-50 p-4 shadow-sm">
-                        <h4 className="text-red-700 font-semibold text-base mb-3 flex items-center gap-2">
-                          <span>❌</span>
-                          <span>{allergen.charAt(0).toUpperCase() + allergen.slice(1)} Allergy</span>
-                          <span className="text-red-500 text-sm bg-red-100 rounded-full px-2 py-1">
-                            {count} {count === 1 ? "item" : "items"}
-                          </span>
-                        </h4>
-
-                        <div className="space-y-2">
-                          {groupedByAllergen[allergen].map((itemName, itemIndex) => (
-                            <div
-                              key={itemIndex}
-                              className="flex justify-between items-center bg-white rounded-xl p-3 border border-red-200"
-                            >
-                              <span className="text-red-600 font-medium">{itemName}</span>
-                              <span className="text-yellow-500 text-xl">⚠️</span>
+                {/* For camera scans, show simplified allergen-only view */}
+                {isCameraScan && (
+                  <div className="bg-red-50 p-4 rounded-xl mb-4">
+                    <h3 className="text-red-700 font-semibold text-lg mb-3">❌ Detected Allergens</h3>
+                    {result.riskyItems?.length > 0 ? (
+                      result.riskyItems.map((item, idx) => {
+                        const allergen = item.reason.replace('Contains ', '').toLowerCase()
+                        return (
+                          <div key={idx} className="mt-2 p-3 bg-white border border-red-200 rounded-lg">
+                            <div className="flex items-center gap-2">
+                              <span className="text-red-600 font-semibold text-lg">⚠️</span>
+                              <span className="text-red-700">Contains <span className="font-bold capitalize">{allergen}</span></span>
                             </div>
-                          ))}
-                        </div>
+                          </div>
+                        )
+                      })
+                    ) : (
+                      <div className="p-3 bg-green-50 border border-green-200 rounded-lg text-green-700">
+                        No allergens detected in the scanned image
                       </div>
-                    )
-                  })}
-                </div>
+                    )}
+                  </div>
+                )}
+
+                {/* For regular menu scans, show grouped by allergen */}
+                {!isCameraScan && (
+                  <div className="space-y-4">
+                    {Object.keys(groupedByAllergen).map((allergen) => {
+                      const count = groupedByAllergen[allergen].length
+
+                      return (
+                        <div key={allergen} className="border border-red-300 rounded-2xl bg-red-50 p-4 shadow-sm">
+                          <h4 className="text-red-700 font-semibold text-base mb-3 flex items-center gap-2">
+                            <span>❌</span>
+                            <span>{allergen.charAt(0).toUpperCase() + allergen.slice(1)} Allergy</span>
+                            <span className="text-red-500 text-sm bg-red-100 rounded-full px-2 py-1">
+                              {count} {count === 1 ? "item" : "items"}
+                            </span>
+                          </h4>
+
+                          <div className="space-y-2">
+                            {groupedByAllergen[allergen].map((itemName, itemIndex) => (
+                              <div
+                                key={itemIndex}
+                                className="flex justify-between items-center bg-white rounded-xl p-3 border border-red-200"
+                              >
+                                <span className="text-red-600 font-medium">{itemName}</span>
+                                <span className="text-yellow-500 text-xl">⚠️</span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 
             {/* Right Column */}
             <div className="space-y-6">
-              {/* Safe Options Card */}
-              <div className="bg-green-50 rounded-3xl shadow-lg p-6">
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                  </div>
-                  <h3 className="text-xl font-semibold text-green-700">Safe Options</h3>
-                </div>
-                <div className="space-y-3">
-                  {data.safe.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-green-50 border border-green-200">
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg">✅</span>
-                        <span className="text-sm text-gray-700 font-medium">{item}</span>
-                      </div>
+              {/* Safe Options Card - Only show for non-camera scans */}
+              {!isCameraScan && (
+                <div className="bg-green-50 rounded-3xl shadow-lg p-6">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                      <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
+                      </svg>
                     </div>
-                  ))}
+                    <h3 className="text-xl font-semibold text-green-700">Safe Options</h3>
+                  </div>
+                  <div className="space-y-3">
+                    {data.safe.map((item, index) => (
+                      <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-green-50 border border-green-200">
+                        <div className="flex items-center gap-2">
+                          <span className="text-lg">✅</span>
+                          <span className="text-sm text-gray-700 font-medium">{item}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Disclaimer Card */}
               <div className="bg-yellow-50 border-2 border-yellow-200 rounded-3xl shadow-lg p-6">
