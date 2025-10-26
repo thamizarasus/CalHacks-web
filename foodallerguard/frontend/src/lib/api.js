@@ -1,5 +1,18 @@
 const API_BASE_URL = '/api'
 
+export const allergenIcon = {
+  fish: "🐟",
+  nuts: "🥜",
+  peanuts: "🥜",
+  dairy: "🧀",
+  eggs: "🥚",
+  soy: "🌱",
+  wheat: "🌾",
+  shellfish: "🦐",
+  sesame: "✨",
+  sulfites: "🚫"
+}
+
 export const getAllergens = async () => {
   try {
     const response = await fetch(`${API_BASE_URL}/allergens`)

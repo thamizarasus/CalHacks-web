@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useScan } from '../context/ScanContext'
+import { allergenIcon } from '../lib/api'
 import TopNavTabs from './TopNavTabs'
 
 function ResultsPage() {
@@ -55,18 +56,6 @@ function ResultsPage() {
       allergen: typeof item === 'string' ? 'allergen' : (item.allergen || 'allergen')
     })),
     safe: safeItems.map(item => typeof item === 'string' ? item : item.name)
-  }
-
-  const allergenEmojiMap = {
-    'dairy': '🧀',
-    'peanuts': '🥜',
-    'shellfish': '🦐',
-    'nuts': '🥜',
-    'eggs': '🥚',
-    'soy': '🌱',
-    'wheat': '🌾',
-    'fish': '🐟',
-    'sesame': '✴️'
   }
 
   return (
@@ -144,13 +133,10 @@ function ResultsPage() {
                 </div>
                 <div className="space-y-3">
                   {data.unsafe.map((item, index) => (
-                    <div key={index} className="bg-red-50 rounded-xl p-4">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="font-semibold text-gray-900">{item.name}</span>
-                        <span className="text-lg">{item.emoji}</span>
-                      </div>
-                      <span className="inline-block bg-red-500 text-white text-xs px-3 py-1 rounded-full">
-                        Contains {item.allergen}
+                    <div key={index} className="bg-red-100 p-3 rounded-xl border border-red-300 text-red-700 flex justify-between items-center">
+                      <span className="font-medium">{item.name}</span>
+                      <span className="text-lg">
+                        {allergenIcon[item.allergen] || "⚠️"}
                       </span>
                     </div>
                   ))}
@@ -172,11 +158,11 @@ function ResultsPage() {
                 </div>
                 <div className="space-y-3">
                   {data.safe.map((item, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <svg className="w-5 h-5 text-green-600 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7"></path>
-                      </svg>
-                      <span className="text-sm text-gray-700">{item}</span>
+                    <div key={index} className="flex items-center justify-between p-2 rounded-lg bg-green-50 border border-green-200">
+                      <div className="flex items-center gap-2">
+                        <span className="text-lg">✅</span>
+                        <span className="text-sm text-gray-700 font-medium">{item}</span>
+                      </div>
                     </div>
                   ))}
                 </div>

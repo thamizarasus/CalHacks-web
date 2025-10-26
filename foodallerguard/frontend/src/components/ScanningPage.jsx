@@ -7,6 +7,7 @@ import TopNavTabs from './TopNavTabs'
 function ScanningPage() {
   const { selectedAllergies, selectedImage, setScanResults } = useScan()
   const [isDone, setIsDone] = useState(false)
+  const [countdown, setCountdown] = useState(5)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -14,6 +15,24 @@ function ScanningPage() {
       navigate("/")
     }
   }, [selectedImage, selectedAllergies, navigate])
+
+  // Countdown timer - only navigate when scan is done and results are available
+  useEffect(() => {
+    if (isDone) {
+      const interval = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval)
+            navigate("/results")
+            return 0
+          }
+          return prev - 1
+        })
+      }, 1000)
+
+      return () => clearInterval(interval)
+    }
+  }, [isDone, navigate])
 
   useEffect(() => {
     const fetchScanResults = async () => {
@@ -27,17 +46,20 @@ function ScanningPage() {
           menu: result.menu, // Send menu items as strings
           riskyItems: result.riskyItems, // Keep risky items info
           safeItems: result.safeItems, // Keep safe items
-          unsafe: result.riskyItems.map(item => ({
-            name: item.item,
-            allergen: item.reason.replace('Contains ', ''),
-            emoji: '⚠️'
-          })),
+          unsafe: result.riskyItems.map(item => {
+            // Extract allergen name from "Contains {allergen}" format
+            const allergen = item.reason.replace('Contains ', '').toLowerCase()
+            return {
+              name: item.item,
+              allergen: allergen,
+              emoji: '⚠️'
+            }
+          }),
           safe: result.safeItems
         }
         console.log('Formatted results:', formattedResults)
         setScanResults(formattedResults)
         setIsDone(true)
-        navigate("/results")
       } catch (error) {
         console.error('Error scanning menu:', error)
         console.error('Error details:', error.message, error.stack)
@@ -68,42 +90,40 @@ function ScanningPage() {
         <div className="max-w-2xl mx-auto">
           {/* Scanning Animation Card */}
           <div className="bg-white rounded-2xl shadow-lg p-12 text-center">
-            {/* Animated Scanner Icon */}
-            <div className="relative w-32 h-32 mx-auto mb-8">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="w-24 h-24 border-4 border-[#A64B29] border-t-transparent rounded-full animate-spin"></div>
-              </div>
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg className="w-16 h-16 text-[#A64B29]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>
-              </div>
+            {/* Animated Scanner with Pulsing Rings */}
+            <div className="relative flex items-center justify-center h-64 mb-8">
+              {/* Pulsing rings */}
+              <div className="absolute w-64 h-64 rounded-full border-4 border-[#A64B29] opacity-75 animate-ping"></div>
+              <div className="absolute w-48 h-48 rounded-full border-4 border-[#A64B29] opacity-50 animate-ping" style={{ animationDelay: '150ms' }}></div>
+              <div className="absolute w-32 h-32 rounded-full border-4 border-[#A64B29] opacity-30 animate-ping" style={{ animationDelay: '300ms' }}></div>
+
+              {/* Core scanner dot */}
+              <div className="w-16 h-16 rounded-full bg-[#A64B29] shadow-lg animate-pulse"></div>
             </div>
 
             {/* Status Text */}
             <h3 className="text-2xl font-semibold text-gray-900 mb-2">
-              Analyzing Ingredients...
+              Analyzing Allergens…
             </h3>
             <p className="text-gray-600 mb-6">
-              Our AI is scanning your food for potential allergens
+              {isDone ? 'Scan complete! Redirecting to results...' : 'Identifying dangerous items...'}
             </p>
 
-            {/* Progress Bar */}
-            <div className="w-full bg-gray-200 rounded-full h-2 mb-4">
-              <div className="bg-[#A64B29] h-2 rounded-full animate-pulse" style={{ width: '60%' }}></div>
-            </div>
+            {/* Countdown Timer - only show when scan is done */}
+            {isDone && (
+              <div className="flex flex-col items-center mt-8 gap-3">
+                <p className="text-gray-900 text-lg font-medium">
+                  Scan complete in: <span className="font-bold text-[#A64B29]">{countdown}</span>s
+                </p>
 
-            {/* Scanning Stages */}
-            <div className="space-y-2 text-sm text-gray-500">
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-2 h-2 bg-[#A64B29] rounded-full animate-pulse"></div>
-                <span>Detecting ingredients...</span>
+                <button
+                  onClick={() => navigate("/")}
+                  className="px-6 py-3 bg-gray-100 hover:bg-gray-200 text-red-600 rounded-full font-semibold shadow transition-colors"
+                >
+                  Stop Scan
+                </button>
               </div>
-              <div className="flex items-center justify-center space-x-2">
-                <div className="w-2 h-2 bg-gray-300 rounded-full"></div>
-                <span className="text-gray-400">Analyzing allergens...</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
