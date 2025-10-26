@@ -1,55 +1,93 @@
-import React from 'react'
+import React, { useState } from "react";
 
-const Header = () => {
+function Logo() {
+  // Simple shield + radar placeholder (inline SVG)
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-sm border-b border-gray-200">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo and Brand */}
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div>
-              <h1 className="text-xl font-bold text-gray-900">FoodAllerGuard</h1>
-              <p className="text-xs text-gray-500">AI-Powered Allergy Risk Scanner</p>
-            </div>
-          </div>
+    <div className="h-9 w-9 rounded-full bg-[#A64B29]/10 flex items-center justify-center ring-1 ring-[#A64B29]/20">
+      <svg viewBox="0 0 24 24" className="h-5 w-5 text-[#A64B29]">
+        <path fill="currentColor" d="M12 2l7 3v5c0 5-3.6 9.6-7 10-3.4-.4-7-5-7-10V5l7-3z"/>
+        <circle cx="12" cy="12" r="4.5" fill="none" stroke="currentColor" strokeWidth="1.2"/>
+        <path d="M12 7.5v1.5m4.5 3h-1.5M12 15v1.5M8.5 12H7" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+      </svg>
+    </div>
+  );
+}
 
-          {/* Navigation Links */}
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              Features
-            </a>
-            <a href="#about" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              About
-            </a>
-            <a href="#contact" className="text-gray-700 hover:text-gray-900 font-medium transition-colors">
-              Contact
+export default function Header({ active = "home" }) {
+  const [open, setOpen] = useState(false);
+
+  const linkBase =
+    "px-3 py-2 text-sm text-slate-600 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-300 rounded-md";
+  const isActive = (k) =>
+    active === k ? "text-[#A64B29] font-semibold" : "";
+
+  return (
+    <header className="sticky top-0 z-40 bg-white/90 backdrop-blur supports-[backdrop-filter]:bg-white/80 shadow-sm">
+      <div className="max-w-6xl mx-auto px-4">
+        <div className="h-16 flex items-center justify-between gap-3">
+          {/* Left: Logo + Brand */}
+          <a href="#" className="flex items-center gap-3">
+            <Logo />
+            <div className="flex flex-col leading-tight">
+              <span className="text-lg font-semibold text-[#A64B29]">FoodAllerGuard</span>
+              <span className="hidden sm:block text-xs text-slate-600">
+                AI-Powered Allergy Risk Scanner
+              </span>
+            </div>
+          </a>
+
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-2">
+            <a href="#features" className={`${linkBase} ${isActive("features")}`}>Features</a>
+            <a href="#about" className={`${linkBase} ${isActive("about")}`}>About</a>
+            <a href="#contact" className={`${linkBase} ${isActive("contact")}`}>Contact</a>
+            <a
+              href="#get-started"
+              className="ml-2 inline-flex items-center rounded-xl bg-[#A64B29] px-5 py-2 text-white text-sm font-medium shadow-sm hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#A64B29]"
+            >
+              Get Started
             </a>
           </nav>
 
-          {/* Get Started Button */}
-          <div className="flex items-center space-x-4">
-            <button 
-              className="bg-[#A64B29] hover:bg-[#8B3E24] text-white px-6 py-2 rounded-lg font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#A64B29] focus:ring-offset-2"
-            >
-              Get Started
-            </button>
-            
-            {/* Mobile menu button */}
-            <button className="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
-              <svg className="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"></path>
-              </svg>
-            </button>
-          </div>
+          {/* Mobile: Hamburger */}
+          <button
+            type="button"
+            className="md:hidden inline-flex items-center justify-center rounded-lg p-2 text-slate-700 hover:bg-slate-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-300"
+            aria-label="Open menu"
+            aria-controls="mobile-menu"
+            aria-expanded={open ? "true" : "false"}
+            onClick={() => setOpen((v) => !v)}
+          >
+            <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              {open ? (
+                <path strokeWidth="1.8" strokeLinecap="round" d="M6 6l12 12M6 18L18 6" />
+              ) : (
+                <path strokeWidth="1.8" strokeLinecap="round" d="M4 7h16M4 12h16M4 17h16" />
+              )}
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Panel */}
+      <div
+        id="mobile-menu"
+        className={`md:hidden border-t border-slate-100 overflow-hidden transition-[max-height] duration-300 ${
+          open ? "max-h-64" : "max-h-0"
+        }`}
+      >
+        <div className="px-4 py-3 space-y-1 bg-white">
+          <a href="#features" className={`${linkBase} block w-full text-left ${isActive("features")}`}>Features</a>
+          <a href="#about" className={`${linkBase} block w-full text-left ${isActive("about")}`}>About</a>
+          <a href="#contact" className={`${linkBase} block w-full text-left ${isActive("contact")}`}>Contact</a>
+          <a
+            href="#get-started"
+            className="mt-2 inline-flex w-full items-center justify-center rounded-xl bg-[#A64B29] px-5 py-2 text-white text-sm font-medium shadow-sm hover:brightness-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[#A64B29]"
+          >
+            Get Started
+          </a>
         </div>
       </div>
     </header>
-  )
+  );
 }
-
-export default Header

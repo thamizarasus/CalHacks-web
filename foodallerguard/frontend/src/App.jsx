@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import Header from "./components/Header"
 import AllergySelector from './components/AllergySelector'
 import UploadCard from './components/UploadCard'
 import Results from './components/Results'
@@ -48,37 +49,41 @@ function App() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <div className="container mx-auto px-4 py-8">
-        <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-2">
-            FoodAllerGuard
-          </h1>
-          <p className="text-lg text-gray-600">
-            Check your food ingredients for allergens
-          </p>
-        </header>
+    <>
+      <Header active="home" />
 
-        <div className="max-w-4xl mx-auto space-y-8">
-          <AllergySelector
-            allergens={allergens}
-            selectedAllergens={selectedAllergens}
-            onSelectionChange={setSelectedAllergens}
-          />
+      <div className="min-h-screen bg-gray-50 pt-20">
+        <div className="container mx-auto px-4 py-8">
+          <header className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-gray-900 mb-2">
+              FoodAllerGuard
+            </h1>
+            <p className="text-lg text-gray-600">
+              Check your food ingredients for allergens
+            </p>
+          </header>
 
-          <UploadCard
-            ingredients={ingredients}
-            onIngredientsChange={setIngredients}
-            onCheckIngredients={handleCheckIngredients}
-            loading={loading}
-          />
+          <div className="max-w-4xl mx-auto space-y-8">
+            <AllergySelector
+              allergens={allergens}
+              selectedAllergens={selectedAllergens}
+              onSelectionChange={setSelectedAllergens}
+            />
 
-          {results && (
-            <Results results={results} />
-          )}
+            <UploadCard
+              ingredients={ingredients}
+              onIngredientsChange={setIngredients}
+              onCheckIngredients={handleCheckIngredients}
+              loading={loading}
+            />
+
+            {results && (
+              <Results results={results} />
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
