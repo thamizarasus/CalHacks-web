@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useScan } from '../context/ScanContext'
 import AllergySelector from './AllergySelector'
 import UploadCard from './UploadCard'
 import Results from './Results'
@@ -8,12 +9,11 @@ import { getAllergens, checkIngredients } from '../lib/api'
 
 function HomePage() {
   const navigate = useNavigate()
+  const { selectedAllergies, setSelectedAllergies, selectedImage, setSelectedImage } = useScan()
   const [allergens, setAllergens] = useState([])
-  const [selectedAllergens, setSelectedAllergens] = useState([])
   const [ingredients, setIngredients] = useState('')
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [selectedImage, setSelectedImage] = useState(null)
 
   useEffect(() => {
     const fetchAllergens = async () => {
@@ -29,7 +29,7 @@ function HomePage() {
   }, [])
 
   const startScanning = () => {
-    if (selectedAllergens.length === 0) {
+    if (selectedAllergies.length === 0) {
       alert("Please select at least one allergy before scanning.")
       return
     }
@@ -37,7 +37,7 @@ function HomePage() {
   }
 
   const handleCheckIngredients = async () => {
-    if (!ingredients.trim() || selectedAllergens.length === 0) {
+    if (!ingredients.trim() || selectedAllergies.length === 0) {
       alert('Please select allergens and enter ingredients to check')
       return
     }
@@ -49,7 +49,7 @@ function HomePage() {
         .map(ingredient => ingredient.trim())
         .filter(ingredient => ingredient.length > 0)
 
-      const data = await checkIngredients(selectedAllergens, ingredientsList)
+      const data = await checkIngredients(selectedAllergies, ingredientsList)
       setResults(data)
     } catch (error) {
       console.error('Failed to check ingredients:', error)
@@ -77,8 +77,8 @@ function HomePage() {
         <div className="max-w-4xl mx-auto space-y-8">
           <AllergySelector
             allergens={allergens}
-            selectedAllergens={selectedAllergens}
-            onSelectionChange={setSelectedAllergens}
+            selectedAllergens={selectedAllergies}
+            onSelectionChange={setSelectedAllergies}
           />
 
           <UploadCard
@@ -86,9 +86,9 @@ function HomePage() {
             onIngredientsChange={setIngredients}
             onCheckIngredients={handleCheckIngredients}
             loading={loading}
-            onFileSelect={setSelectedImage}
+            onFileSelect={(file) => setSelectedImage(file)}
             onStartScan={startScanning}
-            hasSelectedAllergens={selectedAllergens.length > 0}
+            hasSelectedAllergens={selectedAllergies.length > 0}
           />
 
           {results && (

@@ -1,12 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useScan } from '../context/ScanContext'
 import TopNavTabs from './TopNavTabs'
 
 function ResultsPage() {
+  const { scanResults } = useScan()
   const navigate = useNavigate()
 
-  // Sample data - in real implementation, this would come from props or context
-  const data = {
+  useEffect(() => {
+    if (!scanResults) {
+      navigate("/")
+    }
+  }, [scanResults, navigate])
+
+  // Use scanResults from context, with fallback to sample data
+  const data = scanResults || {
     score: 78,
     riskLevel: 'Low Risk',
     menu: [

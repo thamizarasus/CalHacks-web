@@ -1,18 +1,50 @@
 import React, { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useScan } from '../context/ScanContext'
 import TopNavTabs from './TopNavTabs'
 
 function ScanningPage() {
+  const { selectedAllergies, selectedImage, setScanResults } = useScan()
   const [isDone, setIsDone] = useState(false)
   const navigate = useNavigate()
 
   useEffect(() => {
+    if (!selectedImage || selectedAllergies.length === 0) {
+      navigate("/")
+    }
+  }, [selectedImage, selectedAllergies, navigate])
+
+  useEffect(() => {
     const timer = setTimeout(() => {
+      // Simulate AI results
+      const aiResults = {
+        score: 78,
+        riskLevel: 'Low Risk',
+        menu: [
+          { text: 'Garden Salad', price: '$8' },
+          { text: 'Fries', price: '$4' },
+          { text: 'Buffalo Wings', price: '$12', hasAllergen: true, allergen: 'dairy' },
+          { text: 'Grilled Chicken', price: '$14' },
+          { text: 'Peanut Satay', price: '$10', hasAllergen: true, allergen: 'peanuts' },
+          { text: 'Crab Cakes', price: '$16', hasAllergen: true, allergen: 'shellfish' }
+        ],
+        unsafe: [
+          { name: 'Buffalo Wings', emoji: '🧀', allergen: 'dairy' },
+          { name: 'Peanut Satay', emoji: '🥜', allergen: 'peanuts' },
+          { name: 'Crab Cakes', emoji: '🦐', allergen: 'shellfish' }
+        ],
+        safe: [
+          'Garden Salad',
+          'Fries',
+          'Grilled Chicken'
+        ]
+      }
+      setScanResults(aiResults)
       setIsDone(true)
       navigate("/results")
     }, 3500) // Simulate 3.5s AI processing
     return () => clearTimeout(timer)
-  }, [navigate])
+  }, [navigate, setScanResults])
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
