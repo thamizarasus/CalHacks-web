@@ -6,6 +6,9 @@ name = "pypi"
 [packages]
 flask = "*"
 opencv-python = "*"
+pytesseract = "*"
+pillow = "*"
+tesseract = "*"
 
 [dev-packages]
 
