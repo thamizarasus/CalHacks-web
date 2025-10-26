@@ -1,15 +1,19 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import AllergySelector from './AllergySelector'
 import UploadCard from './UploadCard'
 import Results from './Results'
+import TopNavTabs from './TopNavTabs'
 import { getAllergens, checkIngredients } from '../lib/api'
 
 function HomePage() {
+  const navigate = useNavigate()
   const [allergens, setAllergens] = useState([])
   const [selectedAllergens, setSelectedAllergens] = useState([])
   const [ingredients, setIngredients] = useState('')
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
+  const [selectedImage, setSelectedImage] = useState(null)
 
   useEffect(() => {
     const fetchAllergens = async () => {
@@ -23,6 +27,14 @@ function HomePage() {
 
     fetchAllergens()
   }, [])
+
+  const startScanning = () => {
+    if (selectedAllergens.length === 0) {
+      alert("Please select at least one allergy before scanning.")
+      return
+    }
+    navigate("/scanning")
+  }
 
   const handleCheckIngredients = async () => {
     if (!ingredients.trim() || selectedAllergens.length === 0) {
@@ -54,6 +66,9 @@ function HomePage() {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             FoodAllerGuard
           </h1>
+          <div className="mt-6 mb-10">
+            <TopNavTabs active="home" />
+          </div>
           <p className="text-lg text-gray-600">
             Check your food ingredients for allergens
           </p>
@@ -71,6 +86,9 @@ function HomePage() {
             onIngredientsChange={setIngredients}
             onCheckIngredients={handleCheckIngredients}
             loading={loading}
+            onFileSelect={setSelectedImage}
+            onStartScan={startScanning}
+            hasSelectedAllergens={selectedAllergens.length > 0}
           />
 
           {results && (

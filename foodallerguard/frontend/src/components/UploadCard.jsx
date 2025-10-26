@@ -1,17 +1,29 @@
 import React, { useRef } from 'react'
 
-const UploadCard = ({ ingredients, onIngredientsChange, onCheckIngredients, loading, onOpenCamera }) => {
+const UploadCard = ({ ingredients, onIngredientsChange, onCheckIngredients, loading, onOpenCamera, onFileSelect, onStartScan, hasSelectedAllergens }) => {
   const fileInputRef = useRef(null)
 
-  const handleFileSelect = () => {
-    fileInputRef.current?.click()
+  const handleFileSelectButton = () => {
+    if (hasSelectedAllergens) {
+      fileInputRef.current?.click()
+    }
   }
 
   const handleFileChange = (event) => {
     const file = event.target.files[0]
     if (file) {
-      // Handle file upload logic here
-      console.log('File selected:', file)
+      if (onFileSelect) {
+        onFileSelect(file)
+      }
+      if (onStartScan) {
+        onStartScan()
+      }
+    }
+  }
+
+  const handleCameraScan = () => {
+    if (hasSelectedAllergens && onStartScan) {
+      onStartScan()
     }
   }
 
@@ -27,8 +39,13 @@ const UploadCard = ({ ingredients, onIngredientsChange, onCheckIngredients, load
       <div className="space-y-4">
         {/* Upload Menu Photo Button */}
         <button
-          onClick={handleFileSelect}
-          className="w-full bg-[#A64B29] hover:bg-[#8B3E24] text-white py-4 px-6 rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-[#A64B29] focus:ring-offset-2 flex items-center justify-center space-x-3"
+          onClick={handleFileSelectButton}
+          disabled={!hasSelectedAllergens}
+          className={`w-full py-4 px-6 rounded-xl font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center space-x-3 ${
+            hasSelectedAllergens
+              ? 'bg-[#A64B29] hover:bg-[#8B3E24] text-white focus:ring-[#A64B29]'
+              : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+          }`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
@@ -38,8 +55,13 @@ const UploadCard = ({ ingredients, onIngredientsChange, onCheckIngredients, load
 
         {/* Scan with Camera Button */}
         <button
-          onClick={onOpenCamera}
-          className="w-full bg-white hover:bg-gray-50 text-gray-700 py-4 px-6 rounded-xl font-medium border-2 border-gray-300 hover:border-gray-400 transition-colors focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 flex items-center justify-center space-x-3"
+          onClick={handleCameraScan}
+          disabled={!hasSelectedAllergens}
+          className={`w-full py-4 px-6 rounded-xl font-medium border-2 transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 flex items-center justify-center space-x-3 ${
+            hasSelectedAllergens
+              ? 'bg-white hover:bg-gray-50 text-gray-700 border-gray-300 hover:border-gray-400 focus:ring-gray-300'
+              : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
+          }`}
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
