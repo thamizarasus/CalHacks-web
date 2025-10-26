@@ -4,6 +4,7 @@ import json
 import os
 import cv2 as cv
 import numpy as np
+import pytesseract
 
 app = Flask(__name__)
 CORS(app)
@@ -42,6 +43,10 @@ def home_page():
         boxes, confidences = textDetector.detect(frame)
         for box in boxes:
             cv.polylines(frame, [np.array(box, np.int32)], isClosed=True, color=(0, 255, 0), thickness=1)
+
+        img_rgb = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+        word = pytesseract.image_to_string(img_rgb)
+        print(word)
 
         cv.imshow("FoodAllerGuard", frame)
 
