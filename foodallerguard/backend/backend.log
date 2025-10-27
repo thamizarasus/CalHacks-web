@@ -604,3 +604,19 @@
 2025-10-26 08:17:46,859 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 08:17:46] "GET /api/allergens HTTP/1.1" 200 -
 2025-10-26 08:17:46,864 - __main__ - INFO - GET /api/allergens - 127.0.0.1
 2025-10-26 08:17:46,866 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 08:17:46] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 08:22:36,236 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 08:22:36,243 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 08:22:36] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 08:22:36,253 - __main__ - INFO - GET /api/allergens - 127.0.0.1
+2025-10-26 08:22:36,255 - werkzeug - INFO - 127.0.0.1 - - [26/Oct/2025 08:22:36] "GET /api/allergens HTTP/1.1" 200 -
+2025-10-26 20:16:40,539 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:6000
+ * Running on http://10.0.0.84:6000
+2025-10-26 20:16:40,540 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-10-26 20:16:40,540 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 20:16:40,906 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 20:16:40,915 - werkzeug - INFO -  * Debugger PIN: 138-777-696
+2025-10-26 20:17:05,760 - werkzeug - INFO -  * Detected change in '/Users/thamizarasu/Desktop/CalHacks/CalHacks-web/foodallerguard/backend/app.py', reloading
+2025-10-26 20:17:05,913 - werkzeug - INFO -  * Restarting with stat
+2025-10-26 20:17:06,459 - werkzeug - WARNING -  * Debugger is active!
+2025-10-26 20:17:06,468 - werkzeug - INFO -  * Debugger PIN: 138-777-696

@@ -284,45 +284,53 @@ def scan_image():
 @app.route('/scan', methods=['POST'])
 def scan_menu():
     """Scan menu and detect allergens using fake OCR"""
-    data = request.get_json()
-    selected_allergens = [a.lower() for a in data.get("allergens", [])]
+    try:
+        data = request.get_json()
+        selected_allergens = [a.lower() for a in data.get("allergens", [])]
 
-    # ✅ 1. Split OCR text into menu items
-    menu_items = [item.strip() for item in MOCK_OCR_TEXT.strip().split("\n") if item.strip()]
+        logger.info(f'Scan request with allergens: {selected_allergens}')
 
-    risky_items = []
-    safe_items = []
+        # ✅ 1. Split OCR text into menu items
+        menu_items = [item.strip() for item in MOCK_OCR_TEXT.strip().split("\n") if item.strip()]
 
-    # ✅ 2. Analyze each menu item for allergens
-    for item in menu_items:
-        lowercase_item = item.lower()
-        is_risk = False
-        risk_allergen = None
+        risky_items = []
+        safe_items = []
 
-        for allergen in selected_allergens:
-            keywords = ALLERGEN_KEYWORDS.get(allergen, [])
-            if any(keyword in lowercase_item for keyword in keywords):
-                risky_items.append({
-                    "item": item,
-                    "reason": f"Contains {allergen}"
-                })
-                is_risk = True
-                risk_allergen = allergen
-                break
+        # ✅ 2. Analyze each menu item for allergens
+        for item in menu_items:
+            lowercase_item = item.lower()
+            is_risk = False
+            risk_allergen = None
 
-        if not is_risk:
-            safe_items.append(item)
+            for allergen in selected_allergens:
+                keywords = ALLERGEN_KEYWORDS.get(allergen, [])
+                if any(keyword in lowercase_item for keyword in keywords):
+                    risky_items.append({
+                        "item": item,
+                        "reason": f"Contains {allergen}"
+                    })
+                    is_risk = True
+                    risk_allergen = allergen
+                    break
 
-    # ✅ 3. Calculate safety score based on risk count
-    risk_count = len(risky_items)
-    safety_score = max(0, 100 - (risk_count * 12))
+            if not is_risk:
+                safe_items.append(item)
 
-    return jsonify({
-        "menu": menu_items,
-        "riskyItems": risky_items,
-        "safeItems": safe_items,
-        "score": safety_score
-    })
+        # ✅ 3. Calculate safety score based on risk count
+        risk_count = len(risky_items)
+        safety_score = max(0, 100 - (risk_count * 12))
+
+        return jsonify({
+            "menu": menu_items,
+            "riskyItems": risky_items,
+            "safeItems": safe_items,
+            "score": safety_score
+        })
+    except Exception as e:
+        logger.error(f"Error in scan_menu: {str(e)}")
+        import traceback
+        logger.error(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
 
 @app.route('/api/clear-scans', methods=['DELETE'])
 def clear_scans_api():
